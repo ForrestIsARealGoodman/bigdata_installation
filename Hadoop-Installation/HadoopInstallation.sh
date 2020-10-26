@@ -67,7 +67,7 @@ install_java(){
 }
 
 install_hadoop(){
-    log "path hadoop packages..."
+    log "install hadoop packages..."
     HADOOP_PACKAGE=$(ls | grep 'hadoop.*[gz]$' | head -1)
     if [ -z "$HADOOP_PACKAGE" ]; then
       wget $HADOOP_URL
@@ -76,7 +76,7 @@ install_hadoop(){
     mkdir -p /usr/local/hadoop
     cp -rp /usr/local/$HADOOP_NAME/* /usr/local/hadoop
     rm -fr /usr/local/$HADOOP_NAME
-    log "path hadoop packages - done!"
+    log "install hadoop packages - done!"
 }
 
 # shellcheck disable=SC2129
@@ -216,7 +216,7 @@ install_hadoop_in_single_node(){
     path_hadoop
     which hadoop
     if [ $? -eq 0 ]; then
-      add_hadoop_user
+      #add_hadoop_user
       log 'hadoop installation completed!'
     else
       log 'hadoop installation failed!'
