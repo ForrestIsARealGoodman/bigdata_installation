@@ -86,7 +86,7 @@ path_hadoop(){
 }
 
 prepare_config_file(){
-  cp -rf config/* "$HADOOP_HOME"/etc/hadoop
+  cp -rf configs/* "$HADOOP_HOME"/etc/hadoop
 }
 
 add_hadoop_user(){
