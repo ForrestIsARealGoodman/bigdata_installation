@@ -67,6 +67,7 @@ install_java(){
 }
 
 install_hadoop(){
+    log "path hadoop packages..."
     HADOOP_PACKAGE=$(ls | grep 'hadoop.*[gz]$' | head -1)
     if [ -z "$HADOOP_PACKAGE" ]; then
       wget $HADOOP_URL
@@ -75,10 +76,12 @@ install_hadoop(){
     mkdir -p /usr/local/hadoop
     cp -rp /usr/local/$HADOOP_NAME/* /usr/local/hadoop
     rm -fr /usr/local/$HADOOP_NAME
+    log "path hadoop packages - done!"
 }
 
 # shellcheck disable=SC2129
 path_hadoop(){
+    log "path hadoop..."
     echo "export HADOOP_HOME=/usr/local/hadoop" >> /etc/profile
     echo "export HADOOP_INSTALL=$HADOOP_HOME" >> /etc/profile
     echo "export HADOOP_MAPRED_HOME=$HADOOP_HOME" >> /etc/profile
@@ -91,6 +94,7 @@ path_hadoop(){
     sed -i "/^export PATH=.*/s/$/:\$HADOOP_HOME\/bin/" /etc/profile
     sed -i "/^export PATH=.*/s/$/:\$HADOOP_HOME\/sbin/" /etc/profile
     source /etc/profile
+    log "path hadoop - done!"
 }
 
 prepare_config_file(){
@@ -105,7 +109,7 @@ add_hadoop_user(){
     mkdir -p "$HADOOP_HOME/dfs/data"
     mkdir -p "$HADOOP_HOME/tmp"
     sudo chown -R "hdoop" "/usr/local/hadoop"
-    log "Done!"
+    log "add and assign permission to user hdoop - done!"
 }
 
 check_IPAddr(){
