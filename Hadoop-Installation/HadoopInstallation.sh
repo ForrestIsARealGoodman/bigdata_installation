@@ -216,7 +216,7 @@ install_hadoop_in_single_node(){
     path_hadoop
     which hadoop
     if [ $? -eq 0 ]; then
-      #add_hadoop_user
+      add_hadoop_user
       log 'hadoop installation completed!'
     else
       log 'hadoop installation failed!'
