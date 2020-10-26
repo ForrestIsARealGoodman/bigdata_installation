@@ -67,7 +67,7 @@ install_hadoop(){
     fi
     tar -C /usr/local -zxvf "$HADOOP_PACKAGE"
     mkdir -p /usr/local/hadoop
-    mv /usr/local/$HADOOP_NAME/* /usr/local/hadoop/
+    mv /usr/local/$HADOOP_NAME /usr/local/hadoop
 }
 
 # shellcheck disable=SC2129
@@ -81,7 +81,8 @@ path_hadoop(){
     echo "export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native" >> /etc/profile
     echo "export HADOOP_OPTS=-Djava.library.path=$HADOOP_HOME/lib/native" >> /etc/profile
     # end of the last line
-    sed -i "/^export PATH=.*/s/$/:\$HADOOP_HOME\/bin/:\$HADOOP_HOME\/sbin/" /etc/profile
+    sed -i "/^export PATH=.*/s/$/:\$HADOOP_HOME\/bin/" /etc/profile
+    sed -i "/^export PATH=.*/s/$/:\$HADOOP_HOME\/sbin/" /etc/profile
     source /etc/profile
 }
 
