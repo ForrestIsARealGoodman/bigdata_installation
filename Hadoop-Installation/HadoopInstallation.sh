@@ -9,14 +9,19 @@ HADOOP_URL='http://10.150.141.137:9000/'$HADOOP_NAME'.tar.gz'
 
 MASTER_IP="0.0.0.0"
 WORKER_IP_ARRAY=()
+########################Common Log#########################
+log(){
+  now=$(date +"%T")
+  echo "[$now]:$1"
+}
 
 install_jdk(){
-    echo 'Begin to download JDK8.......'
+    log 'Begin to download JDK8.......'
     JDK_PACKAGE=$(ls | grep 'jdk.*[gz]$' | head -1)
     if [ -z "$JDK_PACKAGE" ]; then
       wget $JDK_URL
     fi
-    echo "Begin to uncompress jdk:$JDK_PACKAGE"
+    log "Begin to uncompress jdk:$JDK_PACKAGE"
     tar -C /usr/local -zxf "$JDK_PACKAGE"
     mkdir -p /usr/local/java/
     cp -rp /usr/local/$JDK_DIR/* /usr/local/hadoop
@@ -27,7 +32,7 @@ path_jdk(){
     grep -q "export PATH=" /etc/profile
     if [ $? -ne 0 ]; then
         # last line
-        echo "export PATH=$PATH:$JAVA_HOME/bin">>/etc/profile
+        log "export PATH=$PATH:$JAVA_HOME/bin">>/etc/profile
     else
         # end of the last line
         sed -i "/^export PATH=.*/s/$/:\$JAVA_HOME\/bin/" /etc/profile
@@ -44,20 +49,20 @@ path_jdk(){
 }
 
 install_java(){
-    echo 'check java environment'
+    log 'check java environment'
     java -version
     if [ $? -ne 0 ]; then
-        echo 'Begin to install jdk......'
+        log 'Begin to install jdk......'
         install_jdk
         path_jdk
         java -version
         if [ $? -eq 0 ]; then
-            echo 'JDK8 installation completed!'
+            log 'JDK8 installation completed!'
         else
-            echo 'JDK8 installation failed!'
+            log 'JDK8 installation failed!'
         fi
     else
-        echo 'JDK already installed!'
+        log 'JDK already installed!'
     fi
 }
 
@@ -93,12 +98,14 @@ prepare_config_file(){
 }
 
 add_hadoop_user(){
+    log "add and assign permission to user hdoop..."
     adduser hdoop
     usermod -aG sudo hdoop
     mkdir -p "$HADOOP_HOME/dfs/name"
     mkdir -p "$HADOOP_HOME/dfs/data"
     mkdir -p "$HADOOP_HOME/tmp"
-    sudo chown -R -v "hdoop" "/usr/local/hadoop"
+    sudo chown -R "hdoop" "/usr/local/hadoop"
+    log "Done!"
 }
 
 check_IPAddr(){
@@ -129,10 +136,10 @@ input_MasterIP(){
   if [ $? -eq 0 ]; then
       MASTER_IP=$master_ip
   else
-      echo "Invalid master ip[$master_ip], please re-input...."
+      log "Invalid master ip[$master_ip], please re-input...."
       input_MasterIP
   fi
-  echo "master ip:$MASTER_IP"
+  log "master ip:$MASTER_IP"
 }
 
 input_WorkerIPs(){
@@ -146,7 +153,7 @@ input_WorkerIPs(){
     if [ $? -eq 0 ]; then
       WORKER_IP_ARRAY[$index_ip]=$worker_ip
     else
-      echo "Invalid worker ip[$worker_ip], please re-input...."
+      log "Invalid worker ip[$worker_ip], please re-input...."
       input_WorkerIPs "$index_ip"
       if [ $? -eq 0 ]; then
         return 0
@@ -195,40 +202,42 @@ prepare_worker_node(){
 }
 
 install_hadoop_in_single_node(){
-  echo 'install_hadoop_in_single_mode...'
+  log 'install_hadoop_in_single_mode...'
   install_java
-  echo 'Check hadoop...'
+  log 'Check hadoop...'
   which hadoop
   if [ $? -ne 0 ]; then
-    echo 'installing hadoop...'
+    log 'installing hadoop...'
     install_hadoop
     path_hadoop
     which hadoop
     if [ $? -eq 0 ]; then
       add_hadoop_user
-      echo 'hadoop installation completed!'
+      log 'hadoop installation completed!'
     else
-      echo 'hadoop installation failed!'
+      log 'hadoop installation failed!'
     fi
   else
-    echo 'hadoop already installed!'
+    log 'hadoop already installed!'
   fi
 }
 
 
 #2 Master Node Hadoop
 install_hadoop_in_master_node(){
-    echo 'install_hadoop_in_master_mode...'
+    log 'install_hadoop_in_master_mode...'
     prepare_master_node
     install_hadoop_in_single_node
     prepare_config_file
+    log "done!"
 }
 #3 Worker Node Hadoop
 install_hadoop_in_worker_node(){
-    echo 'install_hadoop_in_worker_mode...'
+    log 'install_hadoop_in_worker_mode...'
     prepare_worker_node
     install_hadoop_in_single_node
     prepare_config_file
+    log "done!"
 }
 
 consoleInput(){
