@@ -678,7 +678,6 @@ consoleInput(){
         *)  echo '没有该选项，请重新输入!!!退出请按Ctrl+c'
             consoleInput
         ;;
-    esac
 }
 echo 'Executing the script with root permission'
 echo '----------------------------------------------------'
