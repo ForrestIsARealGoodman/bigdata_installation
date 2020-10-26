@@ -17,9 +17,10 @@ install_jdk(){
       wget $JDK_URL
     fi
     echo "Begin to uncompress jdk:$JDK_PACKAGE"
-    tar -C /usr/local -zxvf "$JDK_PACKAGE"
+    tar -C /usr/local -zxf "$JDK_PACKAGE"
     mkdir -p /usr/local/java/
-    mv /usr/local/$JDK_DIR/* /usr/local/java/
+    cp -rp /usr/local/$JDK_DIR/* /usr/local/hadoop
+    rm -fr /usr/local/$JDK_DIR
 }
 
 path_jdk(){
@@ -65,9 +66,10 @@ install_hadoop(){
     if [ -z "$HADOOP_PACKAGE" ]; then
       wget $HADOOP_URL
     fi
-    tar -C /usr/local -zxvf "$HADOOP_PACKAGE"
+    tar -C /usr/local -zxf "$HADOOP_PACKAGE"
     mkdir -p /usr/local/hadoop
-    mv /usr/local/$HADOOP_NAME /usr/local/hadoop
+    cp -rp /usr/local/$HADOOP_NAME/* /usr/local/hadoop
+    rm -fr /usr/local/$HADOOP_NAME
 }
 
 # shellcheck disable=SC2129
