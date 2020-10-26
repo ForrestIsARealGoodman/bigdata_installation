@@ -95,11 +95,10 @@ prepare_config_file(){
 add_hadoop_user(){
     adduser hdoop
     usermod -aG sudo hdoop
-    sudo chown -R -v "hdoop" "/usr/local/hadoop"
-    su - hdoop
     mkdir -p "$HADOOP_HOME/dfs/name"
     mkdir -p "$HADOOP_HOME/dfs/data"
     mkdir -p "$HADOOP_HOME/tmp"
+    sudo chown -R -v "hdoop" "/usr/local/hadoop"
 }
 
 check_IPAddr(){
@@ -171,7 +170,7 @@ prepare_master_node(){
   do
      ((index_worker++))
      echo "$worker_ip worker$index_worker" >> /etc/hosts
-     echo "worker$index_worker" >> "$HADOOP_HOME/etc/hadoop/workers"
+     echo "worker$index_worker" >> configs/workers
      # or do whatever with individual element of the array
   done
 
@@ -204,7 +203,6 @@ install_hadoop_in_single_node(){
     echo 'installing hadoop...'
     install_hadoop
     path_hadoop
-    prepare_config_file
     which hadoop
     if [ $? -eq 0 ]; then
       add_hadoop_user
@@ -223,12 +221,14 @@ install_hadoop_in_master_node(){
     echo 'install_hadoop_in_master_mode...'
     prepare_master_node
     install_hadoop_in_single_node
+    prepare_config_file
 }
 #3 Worker Node Hadoop
 install_hadoop_in_worker_node(){
     echo 'install_hadoop_in_worker_mode...'
     prepare_worker_node
     install_hadoop_in_single_node
+    prepare_config_file
 }
 
 consoleInput(){
