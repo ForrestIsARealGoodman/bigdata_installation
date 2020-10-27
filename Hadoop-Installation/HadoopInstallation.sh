@@ -32,7 +32,7 @@ path_jdk(){
     grep -q "export PATH=" /etc/profile
     if [ $? -ne 0 ]; then
         # last line
-        log "export PATH=$PATH:$JAVA_HOME/bin">>/etc/profile
+        echo "export PATH=$PATH:$JAVA_HOME/bin">>/etc/profile
     else
         # end of the last line
         sed -i "/^export PATH=.*/s/$/:\$JAVA_HOME\/bin/" /etc/profile
