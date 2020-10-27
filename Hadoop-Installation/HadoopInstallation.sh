@@ -23,8 +23,8 @@ install_jdk(){
     fi
     log "Begin to uncompress jdk:$JDK_PACKAGE"
     tar -C /usr/local -zxf "$JDK_PACKAGE"
-    mkdir -p /usr/local/java/
-    cp -rp /usr/local/$JDK_DIR/* /usr/local/hadoop
+    mkdir -p /usr/local/java
+    cp -rp /usr/local/$JDK_DIR/* /usr/local/java
     rm -fr /usr/local/$JDK_DIR
 }
 
