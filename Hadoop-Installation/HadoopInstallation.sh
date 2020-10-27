@@ -32,7 +32,7 @@ path_jdk(){
     grep -q "export PATH=" /etc/profile
     if [ $? -ne 0 ]; then
         # last line
-        echo "export PATH=$PATH:$JAVA_HOME/bin">>/etc/profile
+        echo 'export PATH=$PATH:$JAVA_HOME/bin'>>/etc/profile
     else
         # end of the last line
         sed -i "/^export PATH=.*/s/$/:\$JAVA_HOME\/bin/" /etc/profile
@@ -42,8 +42,8 @@ path_jdk(){
     if [ $? -ne 0 ]; then
         # import configuration
         sed -i "/^export PATH=.*/i\export JAVA_HOME=/usr/local/java" /etc/profile
-        sed -i "/^export PATH=.*/i\export JRE_HOME=$JAVA_HOME/jre" /etc/profile
-        sed -i "/^export PATH=.*/i\export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar" /etc/profile
+        sed -i '/^export PATH=.*/i\export JRE_HOME=$JAVA_HOME/jre' /etc/profile
+        sed -i '/^export PATH=.*/i\export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar' /etc/profile
     fi
     source /etc/profile
 }
@@ -83,13 +83,13 @@ install_hadoop(){
 path_hadoop(){
     log "path hadoop..."
     echo "export HADOOP_HOME=/usr/local/hadoop" >> /etc/profile
-    echo "export HADOOP_INSTALL=$HADOOP_HOME" >> /etc/profile
-    echo "export HADOOP_MAPRED_HOME=$HADOOP_HOME" >> /etc/profile
-    echo "export HADOOP_COMMON_HOME=$HADOOP_HOME" >> /etc/profile
-    echo "export HADOOP_HDFS_HOME=$HADOOP_HOME" >> /etc/profile
-    echo "export YARN_HOME=$HADOOP_HOME" >> /etc/profile
-    echo "export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native" >> /etc/profile
-    echo "export HADOOP_OPTS=-Djava.library.path=$HADOOP_HOME/lib/native" >> /etc/profile
+    echo 'export HADOOP_INSTALL=$HADOOP_HOME' >> /etc/profile
+    echo 'export HADOOP_MAPRED_HOME=$HADOOP_HOME' >> /etc/profile
+    echo 'export HADOOP_COMMON_HOME=$HADOOP_HOME' >> /etc/profile
+    echo 'export HADOOP_HDFS_HOME=$HADOOP_HOME' >> /etc/profile
+    echo 'export YARN_HOME=$HADOOP_HOME' >> /etc/profile
+    echo 'export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native' >> /etc/profile
+    echo 'export HADOOP_OPTS=-Djava.library.path=$HADOOP_HOME/lib/native' >> /etc/profile
     # end of the last line
     sed -i "/^export PATH=.*/s/$/:\$HADOOP_HOME\/bin/" /etc/profile
     sed -i "/^export PATH=.*/s/$/:\$HADOOP_HOME\/sbin/" /etc/profile
