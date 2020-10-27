@@ -247,14 +247,14 @@ install_hadoop_in_worker_node(){
 set_ssh_login(){
   log "Begin to set local ssh key"
   ssh-keygen -t rsa
-  ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@master
+  ssh-copy-id -i ~/.ssh/id_rsa.pub hdoop@master
   # send ssh key to workers
   # workers
   index_worker=0
   for worker_ip in "${WORKER_IP_ARRAY[@]}"
   do
      ((index_worker++))
-     ssh-copy-id -i ~/.ssh/id_rsa.pub hadoop@"worker$index_worker"
+     ssh-copy-id -i ~/.ssh/id_rsa.pub hdoop@"worker$index_worker"
   done
 
 }
