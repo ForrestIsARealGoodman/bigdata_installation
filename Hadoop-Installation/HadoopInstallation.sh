@@ -245,9 +245,9 @@ install_hadoop_in_worker_node(){
 }
 
 set_ssh_login(){
-  log "Begin to set local ssh key"
+  log "Begin to set local ssh key <ought to be executed under hdoop user>..."
   ssh-keygen -t rsa
-  ssh-copy-id -i ~/.ssh/id_rsa.pub hdoop@master
+  ssh-copy-id localhost
   # send ssh key to workers
   # workers
   mapfile worker_arr < "$HADOOP_HOME/etc/hadoop/workers"
@@ -257,7 +257,7 @@ set_ssh_login(){
      ((index_worker++))
      ssh-copy-id -i ~/.ssh/id_rsa.pub hdoop@"worker$index_worker"
   done
-
+  log "set up ssh key login - done!"
 }
 
 consoleInput(){
