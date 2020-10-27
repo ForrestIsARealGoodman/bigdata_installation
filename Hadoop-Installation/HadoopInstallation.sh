@@ -250,8 +250,9 @@ set_ssh_login(){
   ssh-copy-id -i ~/.ssh/id_rsa.pub hdoop@master
   # send ssh key to workers
   # workers
+  mapfile worker_arr < "$HADOOP_HOME/etc/hadoop/workers"
   index_worker=0
-  for worker_ip in "${WORKER_IP_ARRAY[@]}"
+  for worker_ip in "${worker_arr[@]}"
   do
      ((index_worker++))
      ssh-copy-id -i ~/.ssh/id_rsa.pub hdoop@"worker$index_worker"
