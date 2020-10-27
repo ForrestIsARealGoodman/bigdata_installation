@@ -244,6 +244,22 @@ install_hadoop_in_worker_node(){
     log "done!"
 }
 
+set_ssh_login(){
+  log "Begin to set local ssh key"
+  su - hdoop
+  ssh-keygen -t rsa
+  ssh-copy-id localhost
+  # send ssh key to workers
+  # workers
+  index_worker=0
+  for worker_ip in "${WORKER_IP_ARRAY[@]}"
+  do
+     ((index_worker++))
+     ssh-copy-id "worker$index_worker"
+  done
+
+}
+
 consoleInput(){
     echo 'please input [1-4]'
     echo '1: Hadoop - Master Node'
@@ -260,6 +276,8 @@ consoleInput(){
         3)  initialize_hfds
             echo 'Hadoop initialization...'
             hdfs namenode -format
+        ;;
+        4)  set_ssh_login
         ;;
         *)  echo 'No such option, please input Ctrl+C'
             consoleInput
